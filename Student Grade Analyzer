@@ -1,0 +1,114 @@
+
+#method to add Student name in the list - grades[]
+def add_student(grades, name):
+   
+    for stud in grades:
+        if stud[0] == name:
+            print("Student Already Exists")
+            return
+    grades.append([name, []]) #add name to the list with empty grade list next to it
+    print(f"Name is {name}")
+    print("Student Added successfully")
+
+#method to add grade for the existing student 
+def add_grade(grades, name, grade):
+    for stud in grades:
+        if stud[0] == name:    #checks the existing name matches
+            stud[1].append(grade)
+            print(f"Grade added for {name} as {grade}")  
+            return
+
+    print("Student Not Exists")
+
+#method to calculate specific student Average
+def calculate_avg(grades, name):
+    for stud in grades:
+        if stud[0] == name:
+            if len(stud[1]) == 0: #checks whether the length of the grade is zero or not
+                print("No grades available")
+                return
+
+            avg = sum(stud[1]) / len(stud[1]) #by dividing it provide average grade
+            print(f"Average grade for {name}: {avg}")
+            return
+
+    print("Student not found") #executes when the if condition fails
+
+#method to calculate total class student average
+def calculate_class_average(grades):
+    total_grades = 0
+    total_students = 0
+    for stud in grades:
+        total_grades += sum(stud[1])
+        total_students += len(stud[1])
+
+    if total_students == 0:
+        print("No students in the class")
+        return
+
+    class_avg = total_grades / total_students #this provides total class average
+    print(f"Class average grade is: {class_avg}")
+
+#method to display specific student detail
+def display_stud_grades(grades, name):
+    for stud in grades:
+        if stud[0] == name:
+            if len(stud[1]) == 0:  #executes when grade does not exists
+                print(f"No grades available for {name}")
+                return
+
+            print(f"Grades for {name}: {stud[1]}")
+            return
+
+    print("Student not found")
+
+# method to get a valid student name 
+def get_stud_name():
+    while True:
+        name = input("Enter your name: ")
+        if name.strip().isalpha():    #to check valid name 
+            return name
+        else:
+            print("Invalid Name. Please enter a valid name.")
+
+# Execution starts here!!!
+def main():
+    
+    grades = []  # empty list
+    print("Student Grade Analyzer")
+    print("1. Add Student ")
+    print("2. Add Grade ")
+    print("3. Calculate Average Grades")
+    print("4. Calculate Class Average ")
+    print("5. Display Student Grades")
+    print("6. Exit")
+
+    while True:
+        ch = int(input("Enter your choice: "))  #Getting user choice
+        if ch == 1:
+            name = get_stud_name()  #method to get Student name
+            add_student(grades, name)    #method call
+        elif ch == 2:
+            name = get_stud_name()
+            try:
+                grade = float(input("Enter grade: "))   #Getting grade from user
+            except ValueError:
+                print("Invalid grade. Please enter a valid number.")
+            else:
+                add_grade(grades, name, grade)
+        elif ch == 3:
+            name = get_stud_name()
+            calculate_avg(grades, name)  #method call
+        elif ch == 4:
+            calculate_class_average(grades)   #method call
+        elif ch == 5:
+            name = get_stud_name()
+            display_stud_grades(grades, name)  #method call
+        elif ch == 6:
+            print("Program Exit")   #execution stopss
+            break
+        else:
+            print("Invalid choice")   #choice does not match
+
+if __name__ == "__main__":
+    main()
