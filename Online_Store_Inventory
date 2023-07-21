@@ -91,7 +91,7 @@ def search_product(inventory, search):
             print("Price:", product.get_price())
             print("Quantity:", product.get_quantity())
     else:
-        print(f"No products found with search value: '{search}'")
+        print(f"No products found with search name: '{search}'")
 
 # display product that are in inventory
 def display_inventory(inventory):
@@ -125,7 +125,7 @@ def main():
     inventory = {}  # Empty dict
 
     while True:
-        print("Online Inventory Management")
+        print("Online Inventory Management System")
         print("1. Add Product")
         print("2. Update Product")
         print("3. Remove Product")
