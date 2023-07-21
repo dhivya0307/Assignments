@@ -1,0 +1,178 @@
+#BaseClass
+class Product:
+    def __init__(self, id, name, price, quantity):  #BaseClass Constructor
+        self.id = id          #initialization of variables
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+#Getter methods
+    def get_id(self):
+        return self.id
+
+    def get_name(self):
+        return self.name
+
+    def get_price(self):
+        return self.price
+
+    def get_quantity(self):
+        return self.quantity
+
+#Setter methods
+    def set_id(self, id):
+        self.id = id
+
+    def set_name(self, name):
+        self.name = name
+
+    def set_price(self, price):
+        self.price = price
+
+    def set_quantity(self, quantity):
+        self.quantity = quantity
+
+
+#  SubClass of Baseclass product
+class DiscountedProduct(Product):
+    #subClass Constructor
+    def __init__(self, id, name, price, quantity, discount_percentage):
+        super().__init__(id, name, price, quantity)
+        self.discount_percentage = discount_percentage
+     
+    #To get discount percentage of a product
+    def get_discount_percentage(self):
+        return self.discount_percentage
+    
+    #Calculation part 
+    def get_price(self):
+        discounted_price = self.price * (1 - self.discount_percentage / 100)
+        return discounted_price
+
+# Add product to the inventory
+def add_product(inventory, product):
+    id = product.get("id")
+    if 'discount' in product:
+        discounted_product = DiscountedProduct(
+            id, product['name'], product['price'], product['quantity'], product['discount']
+        )
+        inventory[id] = discounted_product
+    else:
+        inventory[id] = Product(id, product['name'], product['price'], product['quantity'])
+    print("Product added successfully!!!")
+
+# update the product to the inventory
+def update_product(inventory, product):
+    id = product.get_id()
+    if id in inventory:
+        inventory[id]=product
+        print()
+        print("Product updated successfully!!!")
+    else:
+        print(f"Product with ID {id} not found in inventory")
+
+# Remove Product in the inventory
+def remove_product(inventory, id):
+    if id in inventory:
+        del inventory[id]
+
+        print("Product removed successfully!!!")
+    else:
+        print(f"Product with ID '{id}' not found in inventory")
+
+# search product in inventory
+def search_product(inventory, search):
+    match_product = [product for product in inventory.values() if search.lower() in product.get_name().lower()]
+
+    if match_product:
+        print("Product matches!!!")
+        for product in match_product:
+            print("ID:", product.get_id())
+            print("Name:", product.get_name())
+            print("Price:", product.get_price())
+            print("Quantity:", product.get_quantity())
+    else:
+        print(f"No products found with search value: '{search}'")
+
+# display product that are in inventory
+def display_inventory(inventory):
+    if inventory:
+        print("Product")
+        for product in inventory.values():
+            print("ID:", product.get_id())
+            print("Name:", product.get_name())
+            print("Price:", product.get_price())
+            print("Quantity:", product.get_quantity())
+    else:
+        print("Inventory is empty.")
+
+# Exception handling for user inputs       
+def float_input(prompt):
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Invalid input")
+
+def int_input(prompt):
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("Invalid input")
+
+#Execution Begins here!!!
+def main():
+    inventory = {}  # Empty dict
+
+    while True:
+        print("Online Inventory Management")
+        print("1. Add Product")
+        print("2. Update Product")
+        print("3. Remove Product")
+        print("4. Search Product")
+        print("5. Display Product")
+        print("6. Exit")
+
+        choice = input("Enter your choice: ")  #to get choice from the user
+
+        if choice == "1":
+            product = {}
+            product["id"] = int_input("Enter Product id: ")
+            product["name"] = input("Enter Product Name: ")
+            product["price"] = float_input("Enter Product Price: ")
+            product["discount"] = int_input("Enter Discount percentage %:")
+            product["quantity"] = int_input("Enter Product Quantity: ")
+            add_product(inventory, product)
+        elif choice == "2":
+            id = int(input("Enter Product ID to update: "))
+            if id in inventory:
+                product = inventory[id]
+                name = input("Enter new product name: ")
+                price = float_input("Enter new product price: ")
+                quantity =int_input("Enter new product quantity: ")
+                discount = int_input("Enter new product discount: ")
+                product.set_name(name)
+                product.set_price(price)
+                product.set_quantity(quantity)
+                product.discount_percentage=discount 
+                update_product(inventory, product)  #method call to update product
+            else:
+                print(f"Product with ID {id} not found in inventory")
+        elif choice == "3":
+            id = int(input("Enter Product ID to remove: "))
+            remove_product(inventory, id)  #method call to remove product
+        elif choice == "4":
+            search = input("Enter search Name: ")
+            search_product(inventory, search)  #method call to search product
+        elif choice == "5":
+            display_inventory(inventory) # method call to display content
+        elif choice == "6":
+            print("Program Exit")
+            break
+        else:
+            print("Invalid choice")
+
+
+if __name__ == "__main__":
+    main()           #method call for main()
+
